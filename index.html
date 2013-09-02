@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Classroomquest : A GAE (google app engine) project that gives classrooms the ability to have student driven experiences.  Students complete assignments, gain XP, and level up!" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Classroomquest</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Vjmorrison/ClassroomQuest">View on GitHub</a>
+
+          <h1 id="project_title">Classroomquest</h1>
+          <h2 id="project_tagline">A GAE (google app engine) project that gives classrooms the ability to have student driven experiences.  Students complete assignments, gain XP, and level up!</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Vjmorrison/ClassroomQuest/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Vjmorrison/ClassroomQuest/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a name="tech-structure" class="anchor" href="#tech-structure"><span class="octicon octicon-link"></span></a>Tech Structure</h2>
+
+<ul>
+<li>The app is written in Python using the Google App Engine as a platform.<br>
+</li>
+<li>The Web responses are built upon webapp2.</li>
+<li>Page rendering is handled with Jinja2.</li>
+<li>The HTML portions of the site use Bootstap.css and Javascript for all formatting and interactivity.</li>
+<li>Because of Bootstrap and the current javascript, this site runs best in Chrome and FireFox.  IE has some formatting issues.</li>
+<li>Current User Verification is a combination of default Google users API and a built in Whitelist function.</li>
+</ul><h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How To Use</h2>
+
+<p>Currently these is a lot of work that needs to be done to make this more user friendly.  As it stands, much of the personalization and editing must be done in code/html.</p>
+
+<ol>
+<li>Download the current build.</li>
+<li>Change the Whitelist checking in the IsUserInWhitelist function, Line 64 of baseRequestHandler.py</li>
+<li>Upload the system to your App Engine project (to set up google app engine, please try the following tutorial:(<a href="https://developers.google.com/appengine/docs/python/gettingstartedpython27/introduction">https://developers.google.com/appengine/docs/python/gettingstartedpython27/introduction</a>)</li>
+<li>Visit your page and get started!</li>
+</ol><h2>
+<a name="personalization" class="anchor" href="#personalization"><span class="octicon octicon-link"></span></a>Personalization</h2>
+
+<p>Since there are very limited admin personalization controls yet within the app, all visual and formatting changes must be done in code.</p>
+
+<p>Main.py: The core Python class for handling web requests.  If a different handler is required (admin, charactersheet, etc..) it is detailed at the bottom of main.py.</p>
+
+<div class="highlight"><pre><span class="n">app</span> <span class="o">=</span> <span class="n">webapp2</span><span class="o">.</span><span class="n">WSGIApplication</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="s">'/'</span><span class="p">,</span> <span class="n">MainHandler</span><span class="p">))</span>
+<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="s">'/charactersheet'</span><span class="p">,</span> <span class="n">CharacterSheetHandler</span><span class="p">))</span>
+<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="s">'/contact'</span><span class="p">,</span> <span class="n">ContactHandler</span><span class="p">))</span>
+<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="s">'/projects'</span><span class="p">,</span> <span class="n">ProjectsHandler</span><span class="p">))</span>
+<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="s">'/admin'</span><span class="p">,</span> <span class="n">AdminHandler</span><span class="p">))</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">error_handlers</span><span class="p">[</span><span class="mi">404</span><span class="p">]</span> <span class="o">=</span> <span class="n">BaseRequestHandler</span><span class="o">.</span><span class="n">handle_404</span>
+</pre></div>
+
+<p>Each of the other classes only handle the requests for that routed web-request.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Classroomquest maintained by <a href="https://github.com/Vjmorrison">Vjmorrison</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
