@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+    <div id="Submitted Block" class="container">
+        <div class="hero-unit">
+            <h1>Welcome back: {{user.nickname()}}</h1>
+        </div>
+        {% if character.currentProjectKey == 0 %}
+        <div class="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Warning!</strong> You have no active project!  Please <a href="/charactersheet" class="label label-important">Select</a> one soon!
+        </div>
+        {% endif %}
+        {% if waitingSubmission %}
+        <div class="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Attention</strong> You have a project submitted to the instructor.  Please be ready to demonstrate your project next class!
+        </div>
+        {% endif %}
+
+            <div class="row-fluid">
+                <div class="span4 well well-large">
+                    <h2 class="text-center">PowerPoints</h2>
+                    <hr>
+                    <ul>
+                        <li><a href="https://docs.google.com/file/d/0B_emGO_CgNZHd3AycVhMcjdGZGM/edit?usp=sharing">First Day PPT</a> </li>
+                        <li><a href="https://docs.google.com/presentation/d/1a2tEU1nMd7xOYBqyBJDi4eiL8nvhP4LiQu9To7UXQik/edit?usp=sharing">Unity Intro</a> <span class="label label-success">Awesome!</span></li>
+                        <li><a href="https://docs.google.com/presentation/d/1Z1X5PT1ICnmOCmRpZg4GZqiS0Wmkbfs65_70T12hzQ8/edit?usp=sharing">Unity Day 2</a> <span class="label label-warning">Not So Awesome</span></li>
+                        <li><a href="https://docs.google.com/presentation/d/12N3Pyk4vJOGB9sRcIgJo2JCKaENwz3URhcKiKeyCqZk/edit?usp=sharing">Unity Day 3</a> <span class="label label-important">Ick....</span></li>
+                    </ul>
+                </div>
+                <div class="span4 well well-large">
+                    <h2 class="text-center">Videos</h2>
+                    <hr>
+                    <ul>
+                        <li><a href="http://www.youtube.com/user/Unity3D">Unity 3D - <span class="label label-important">Tutorials!!!!</span></a></li>
+                        <li><a href="http://www.youtube.com/watch?v=d5-YE8m2Tfk">Unite Nordic Conference - CCP on Unity Prototyping</a></li>
+                        <li><a href="http://www.youtube.com/watch?v=GYYuhuarTA0">Unite Nordic Conference - Procedural Generation of Content</a> </li>
+                    </ul>
+                </div>
+                <div class="span4 well well-large">
+                    <h2 class="text-center">Links</h2>
+                    <hr>
+                    <ul>
+                        <li><a href="https://docs.google.com/file/d/0B_emGO_CgNZHcTdtU1dzRWdMbnM/edit?usp=docslist_api">Pong Default Code UnityPackage</a> </li>
+                        <li><a href="https://docs.google.com/file/d/0B_emGO_CgNZHQlh5TmpZRDdqNEU/edit?usp=sharing">Top Down Shooter Game UnityPackage</a> </li>
+                        <li><a href="https://github.com/Vjmorrison/Unity-Procedural">Beginnings of a Unity Voxel Base, Procedural Game</a></li>
+                    </ul>
+                </div>
+            </div>
+
+    </div>
+</body>
+</html>
+        {% endautoescape %}

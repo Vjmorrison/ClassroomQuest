@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+
+ <div id="Submitted Block" class="container">
+     <div class="hero-unit">
+        <div class="row">
+            <div class="span3">
+                <div class="thumbnail">
+                    <img src="http://i.imgur.com/lpXVq4n.jpg">
+                </div>
+            </div>
+            <div class="span7">
+                <h1 style="margin-top: 0">Contact Info</h1>
+                <br/>
+                <address>
+                    <strong>Vinnie Morrison</strong><br>
+                    Orange, CA 92865<br>
+                    <a href="mailto:vjmorrison@gmail.com">vjmorrison@gmail.com</a><br>
+                    <a href="https://www.facebook.com/vinnieMorrison">Facebook friend me!</a><br>
+                    <script src="https://apis.google.com/js/plusone.js"></script>
+
+                    <div class="g-ytsubscribe" data-channel="ChapmanGameDev" data-layout="full"></div><br>
+                    <!-- Place this tag where you want the widget to render. -->
+                    <div class="g-follow" data-annotation="bubble" data-height="20" data-href="//plus.google.com/100931776453740639115" data-rel="author"></div><br>
+
+                    <!-- Place this tag after the last widget tag. -->
+                    <script type="text/javascript">
+                      (function() {
+                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                        po.src = 'https://apis.google.com/js/plusone.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                      })();
+                    </script>
+                </address>
+            </div>
+        </div>
+         <p> <strong>Feel free to contact me 24/7 over Email or Chat!</strong></p>
+         <p>I am normally over at Blizzard every day from 8:30am => 7:00pm or later, unless it is class night.  If you are interested in coming to Blizzard and hang out, let me know and I would be happy to accommodate.</p>
+    </div>
+
+ </div>
+</body>
+</html>
+        {% endautoescape %}

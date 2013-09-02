@@ -1,0 +1,47 @@
+!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+
+ <div class="container">
+    <div class="hero-unit">
+        <h1>Project Editor</h1>
+        <p>Here you can edit the currently selected project</p>
+        <p>Make sure to save after changing any values!</p>
+    </div>
+    <div class="well well-large">
+        <form id="projectInfo" action="/projects" method="post">
+            <h3>Project Name: <input name="projectName" type="text" value="{{project.projectName}}"></h3>
+            <h3>Level: <input name="level" type="text" class="input-mini" value="{{project.level}}"></h3>
+            <h3>XP: <input name="xp" type="text" class="input-mini" value="{{project.xp}}"></h3>
+            <h3>Description: <textarea name="description" class="input-xxlarge" type="text">{{project.description}}</textarea></h3>
+            <h3>Youtube Video ID: <input name="videoURL" type="text" class="input-xxlarge" value="{{project.videoURL}}"></h3>
+            <h3>Requirements</h3>
+            <ol id="requirementsList">
+                {% set count = 0 %}
+                {% for requirement in project.requirements %}
+                <li><input id="requirement_{{count}}" name="requirement_{{count}}" type="text" class="input-xxlarge" value="{{requirement}}"></li>
+                {% set count = count + 1 %}
+                {% endfor %}
+            </ol>
+            <button id="addNewRequirement" class="btn btn-success btn-small" onclick="AddRequirement(); return false;"><span class="icon-plus-sign"></span> </button>
+            <button id="removeRequirement" class="btn btn-danger btn-small" onclick="RemoveRequirement(); return false;"><span class="icon-minus-sign"></span></button>
+            <input class="hide" name="save" type="checkbox" checked>
+            <input class="hide" type="hidden" name="projectKey" value="{{project.key.integer_id()}}">
+            <div>
+                <br>
+                <input type="submit" class="btn btn-warning btn-large" value="Save Changes">
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>
+        {% endautoescape %}

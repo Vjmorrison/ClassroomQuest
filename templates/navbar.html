@@ -1,0 +1,53 @@
+<!--HEADER-->
+        <script src="/scripts/chapmanScripts.js"></script>
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .navbar .nav > .logout > a {
+            color: #bd362f;
+            text-decoration: none;
+            -webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
+               -moz-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
+                    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
+        }
+    </style>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <a class="brand" href="/">Chapman Game Dev</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active">
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a href="/charactersheet">Character Sheet</a>
+                    </li>
+                    <li>
+                        <a href="/projects">Projects</a>
+                    </li>
+                    <li>
+                        <a href="/contact">Contact</a>
+                    </li>
+                    {% if character.isAdmin %}
+                    <li>
+                        <a href="/admin">Admin</a>
+                    </li>
+                    {% endif %}
+                    <li class="logout">
+                        <a href="{{ url|safe }}">{{ url_linktext }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<!--END HEADER-->

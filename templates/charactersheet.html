@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png"/>
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css" media="screen"/>
+</head>
+<body onload="InitSelectedProject('{{character.currentProjectKey}}')">
+{% include 'templates/navbar.html' %}
+<div class="container">
+    <div class="hero-unit">
+        <div class="row">
+            <div class="span3">
+                <div class="thumbnail">
+                    <img src="{{character.avatar}}">
+                </div>
+            </div>
+            <div class="span2">
+                <h1 style="margin-top: 0">{{character.user.nickname()}}</h1>
+                <br/>
+                <p class="text-left" style="margin: 0"><span class="label label-info">Level: <span class="badge badge-inverse">{{character.level}}</span> </span></p>
+                <p class="text-left" style="margin: 0"><span class="label label-info">XP: <span class="badge badge-inverse">{{character.xp}}</span> </span></p>
+                <p class="text-left" style="margin: 0"><span class="label label-info">XP to Next Level: <span class="badge badge-inverse">{{character.XpToNextLevel()}}</span> </span></p>
+                <p class="text-left" style="margin: 0"><span class="label label-info">Completed Projects: <span class="badge badge-inverse">{{character.numProjects}}</span> </span></p>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="well well-large">
+        <h4>Currently Selected Project</h4>
+        {% if projects_list.__len__() == 0 %}
+            <p class="label label-success">There are no projects to select!  You have done the impossible and completed ALL the available projects!</p>
+        {% else %}
+            {% if submitted is defined %}
+            <select id="selectedProject" onchange="OnUnsavedChanges()" style="margin-bottom: 0px" class="input-xxlarge" disabled>
+                {% for project in projects_list %}
+                    {% if project.key.integer_id() == character.currentProjectKey %}
+                    <option value="{{project.key.integer_id()}}" selected>Level:{{project.level}} - XP:{{project.xp}} >> {{project.projectName}}</option>
+                    {% else %}
+                    <option value="{{project.key.integer_id()}}">Level:{{project.level}} - XP:{{project.xp}} >> {{project.projectName}}</option>
+                    {% endif %}
+                {% else %}
+                {% endfor %}
+            </select>
+            {% else %}
+             <select id="selectedProject" onchange="OnUnsavedChanges()" style="margin-bottom: 0px" class="input-xxlarge">
+                {% for project in projects_list %}
+                    {% if project.key.integer_id() == character.currentProjectKey %}
+                    <option value="{{project.key.integer_id()}}" selected>Level:{{project.level}} - XP:{{project.xp}} >> {{project.projectName}}</option>
+                    {% else %}
+                    <option value="{{project.key.integer_id()}}">Level:{{project.level}} - XP:{{project.xp}} >> {{project.projectName}}</option>
+                    {% endif %}
+                {% else %}
+                {% endfor %}
+            </select>
+            {% endif %}
+            {% if character.currentProjectKey != 0 %}
+            <button id="saveChangesBTN" class="btn btn-inverse" type="button" onclick="OnSaveChanges()" disabled>Saved</button>
+            {% else %}
+            <button id="saveChangesBTN" class="btn btn-success" type="button" onclick="OnSaveChanges()">Select a New Project</button>
+            {% endif %}
+        {% endif %}
+        <br>
+        <div>
+            {% if projects_list.__len__() > 0%}
+          <button id="moreInfoBTN" class="btn btn-info btn-small" type="button" onclick="ToggleProjectDetails('moreInfoBTN', 'moreInfoDiv')">Show Project Info</button>
+            <div id="moreInfoDiv" class="thumbnail hide" style="background-color: #e1e1e8">
+                 <ul>
+                     {% for project in projects_list %}
+                    <li id="info_{{project.key.integer_id()}}" class="hide"><p><strong>{{project.projectName}}</strong>
+                            <span class="label label-info">Level:<span class="badge badge-important">{{project.level}}</span></span>
+                            <span class="label label-info">XP: <span class="badge badge-important">{{project.xp}}</span></span>
+                        </p>
+                        <ul>
+                            <li><span class="label label-info">Description</span>
+                                <p>{{project.description}}</p>
+                            </li>
+                            <li><span class="label label-important">Requirements</span>
+                                <ol>
+                                    {% for requirement in project.requirements %}
+                                    <li>{{requirement}}</li>
+                                    {% endfor %}
+                                </ol>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p id="videoURL_{{project.key.integer_id()}}" class="hide">{{project.videoURL}}</p>
+                <div id="video_{{project.key.integer_id()}}">
+                </div>
+                     {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <h4>Submit Project</h4>
+        <div id="submitContainer">
+            {% if submitted is defined %}
+            <p><span class="badge badge-important">!</span>You have already submitted a project!  Please wait for the instructor to review the project. please be prepared to have your project available to show at the next possible class.</p>
+            <p>Feel free to work on additional projects before then.</p>
+            {% else %}
+            <p>Once you are ready to submit your current in-progress project, click the SUBMIT button.  This will notify the instructor that you are ready to have your project reviewed.</p>
+            <p>Once Submitted, please be prepared to have your project available to show at the next possible class.</p>
+            {% if character.currentProjectKey != 0 %}
+                <button id="submitBTN" class="btn btn-danger" type="button" onclick="OnSubmitProject()" >Submit Project</button>
+                {% else %}
+                <button id="submitBTN" class="btn btn-danger" type="button" onclick="OnSubmitProject()" disabled>Select a Project First</button>
+                {% endif %}
+            {% endif %}
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <div class="row-fluid">
+            <div class="span10">
+                <h2>Completed Projects</h2>
+
+                <div>
+                    <ul>
+                        {% for project in completed_projects_list %}
+                        <li>Date:{{project.ReviewedTime.strftime("%A, %d. %B %Y")}} -- {{project.projectName}}</li>
+                        {% else %}
+                        <li>No Projects Completed Yet</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{% endautoescape %}

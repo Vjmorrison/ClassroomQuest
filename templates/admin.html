@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+
+    <div id="Submitted Block" class="container">
+        <div class="hero-unit">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Submission Date</th>
+                        <th>Project</th>
+                        <th>Instructor Approval</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if allSubmissions is defined %}
+                        {% for submission, dict in allSubmissions.iteritems() %}
+                        <tr id="{{submission}}">
+                            <td><a href="admin?ID={{dict[1].user.user_id()}}">{{dict[1].user.nickname()}}</a></td>
+                            <td>{{dict[0].submissionTime.strftime("%A, %d. %B %Y %I:%M%p")}}</td>
+                            <td>{{dict[0].projectName}}</td>
+                            <td><button id="Accept{{submission}}" class="btn btn-success" type="button" onclick="OnAcceptProject({{submission}}, '{{dict[1].user.user_id()}}')">Accept</button><button id="Reject{{submission}}" class="btn btn-danger pull-right" type="button" onclick="OnRejectProject({{submission}}, {{dict[1].user.user_id()}})">Reject</button></td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td><div class="text-center">N/A</div></td>
+                            <td><div class="text-center">-</div></td>
+                            <td><div class="text-center">-</div></td>
+                            <td><div class="text-center">-</div></td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+        {% endautoescape %}
