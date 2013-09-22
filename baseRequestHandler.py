@@ -14,7 +14,7 @@ import webapp2
 
 class BaseRequestHandler(webapp2.RequestHandler):
 
-    USERNAME_WHITELIST = ["vjmorrison@gmail.com", "pravinwagh@gmail.com"]
+    USERNAME_WHITELIST = ["vjmorrison@gmail.com"]
 
     JINJA_ENVIRONMENT = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
