@@ -14,6 +14,8 @@ import webapp2
 
 class BaseRequestHandler(webapp2.RequestHandler):
 
+    USERNAME_WHITELIST = ["vjmorrison@gmail.com", "pravinwagh@gmail.com"]
+
     JINJA_ENVIRONMENT = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
         extensions=['jinja2.ext.autoescape'])
@@ -63,7 +65,7 @@ class BaseRequestHandler(webapp2.RequestHandler):
 
     def IsUserInWhitelist(self, user):
         if "@mail.chapman.edu".upper() not in user.email().upper():
-            if "vjmorrison@gmail.com".upper() not in user.email().upper():
+            if not any(username in user.email().upper() for username in [x.upper() for x in self.USERNAME_WHITELIST]):
                 return False
         return True
 
