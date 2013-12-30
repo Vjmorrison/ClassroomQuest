@@ -24,6 +24,9 @@ Currently these is a lot of work that needs to be done to make this more user fr
 
 Personalization
 ---------------
+The Whitelist of email addresses or base email addresses is added in the config.ini file.
+Your first admin email should also be added there.
+
 Since there are very limited admin personalization controls yet within the app, all visual and formatting changes must be done in code.
 
 Main.py: The core Python class for handling web requests.  If a different handler is required (admin, charactersheet, etc..) it is detailed at the bottom of main.py.
