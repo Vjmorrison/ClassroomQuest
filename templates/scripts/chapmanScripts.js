@@ -167,6 +167,11 @@ function InitRequirements()
     window.requirementsCount = $("#requirementsList li").size() - 1
 }
 
+function InitAttachments()
+{
+    window.attachmentsCount = $("#attachmentsList li").size() - 1
+}
+
 function ToggleProjectVisible(projectKey)
 {
     var selectedProjectInfo = document.getElementById("info_" + projectKey);
@@ -262,4 +267,44 @@ function RemoveRequirement()
         list.removeChild(newInput.parentNode)
     }
     window.requirementsCount--;
+}
+
+function AddAttachment()
+{
+    if(window.attachmentsCount == null)
+    {
+        InitAttachments();
+    }
+
+    window.attachmentsCount++;
+    var list = document.getElementById("attachmentsList");
+
+    var newReq = document.createElement("li");
+    var newInput = document.createElement("input");
+
+    newInput.id = "attachment_" + window.attachmentsCount;
+    newInput.name = "attachment_" + window.attachmentsCount;
+    newInput.type = "text";
+    newInput.className = "input-xxlarge";
+
+    newReq.appendChild(newInput);
+    list.appendChild(newReq);
+}
+
+function RemoveAttachment()
+{
+    if(window.requirementsCount == null)
+    {
+        InitAttachments();
+    }
+
+    var list = document.getElementById("attachmentsList");
+    var newInput = document.getElementById("attachment_" + window.attachmentsCount);
+
+    if(newInput != null)
+    {
+        list.removeChild(newInput.parentNode)
+    }
+
+    window.attachmentsCount--;
 }

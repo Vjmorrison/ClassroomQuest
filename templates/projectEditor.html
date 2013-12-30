@@ -22,8 +22,9 @@
             <h3>Level: <input name="level" type="text" class="input-mini" value="{{project.level}}"></h3>
             <h3>XP: <input name="xp" type="text" class="input-mini" value="{{project.xp}}"></h3>
             <h3>Description: <textarea name="description" class="input-xxlarge" type="text">{{project.description}}</textarea></h3>
-            <h3>Youtube Video ID: <input name="videoURL" type="text" class="input-xxlarge" value="{{project.videoURL}}"></h3>
+            <h3>Youtube Video ID (The last part of a youtube link "pZaOhYEIQHE"): <input name="videoURL" type="text" class="input-xxlarge" value="{{project.videoURL}}"></h3>
             <h3>Requirements</h3>
+            <p>The requirements for the project to be determined complete</p>
             <ol id="requirementsList">
                 {% set count = 0 %}
                 {% for requirement in project.requirements %}
@@ -33,6 +34,17 @@
             </ol>
             <button id="addNewRequirement" class="btn btn-success btn-small" onclick="AddRequirement(); return false;"><span class="icon-plus-sign"></span> </button>
             <button id="removeRequirement" class="btn btn-danger btn-small" onclick="RemoveRequirement(); return false;"><span class="icon-minus-sign"></span></button>
+            <h3>Attachments</h3>
+            <p>Links to external resourses that are required for the project</p>
+            <ol id="attachmentsList">
+                {% set count = 0 %}
+                {% for attachment in project.attachments %}
+                <li><input id="attachment_{{count}}" name="attachment_{{count}}" type="text" class="input-xxlarge" value="{{attachment}}"></li>
+                {% set count = count + 1 %}
+                {% endfor %}
+            </ol>
+            <button id="addAttachment" class="btn btn-success btn-small" onclick="AddAttachment(); return false;"><span class="icon-plus-sign"></span> </button>
+            <button id="removeAttachment" class="btn btn-danger btn-small" onclick="RemoveAttachment(); return false;"><span class="icon-minus-sign"></span></button>
             <input class="hide" name="save" type="checkbox" checked>
             {% if project.key %}
             <input class="hide" type="hidden" name="projectKey" value="{{project.key.integer_id()}}">

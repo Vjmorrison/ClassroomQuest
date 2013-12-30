@@ -61,6 +61,7 @@ class Project(ndb.Model):
     description = ndb.StringProperty(indexed=False)
     requirements = ndb.StringProperty(repeated=True, indexed=False)
     videoURL = ndb.StringProperty(indexed=False)
+    attachments = ndb.StringProperty(repeated=True, indexed=False)
 
     @classmethod
     def GetProjects(cls):

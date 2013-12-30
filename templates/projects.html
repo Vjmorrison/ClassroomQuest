@@ -36,9 +36,17 @@
                         </ol>
                     </li>
                     {% if project.videoURL %}
-                    <li><a class="btn btn-info btn-mini" href="http://www.youtube.com/watch?v={{project.videoURL}}">Video Link</a>
+                    <li><a class="btn btn-info btn-mini" href="http://www.youtube.com/watch?v={{project.videoURL}}">Video Link</a></li>
                     {% endif %}
+                    {% if project.attachments|length > 0 %}
+                    <li><span class="label label-success">Attachments</span>
+                        <ol>
+                            {% for attachment in project.attachments %}
+                            <li><a href="{{attachment}}">{{attachment}}</a></li>
+                            {% endfor %}
+                        </ol>
                     </li>
+                    {% endif %}
                 </ul>
             </li>
             {% if character.isAdmin %}

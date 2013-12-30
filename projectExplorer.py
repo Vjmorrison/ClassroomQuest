@@ -85,12 +85,21 @@ class ProjectsHandler(BaseRequestHandler):
                         break
                     newRequirements.append(requirementValue)
 
+                newAttachments = []
+
+                for j in range(100):
+                    attachmentValue = self.request.get("attachment_" + str(j))
+                    if attachmentValue == "":
+                        break
+                    newAttachments.append(attachmentValue)
+
                 project.projectName = newName
                 project.xp = newXP
                 project.level = newLevel
                 project.description = newDesc
                 project.requirements = newRequirements
-                if not newVideoURL == 'None':
+                project.attachments = newAttachments
+                if not newVideoURL == 'None' or newVideoURL == "":
                     project.videoURL = newVideoURL
 
                 project.put()
