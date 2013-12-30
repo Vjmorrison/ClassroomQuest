@@ -123,6 +123,7 @@ function OnAcceptSuccess(response, submissionID)
 {
     var row = document.getElementById(submissionID)
     row.disabled = true;
+    console.log("Accepted!");
 }
 
 function OnRejectProject(SubKey, userID)

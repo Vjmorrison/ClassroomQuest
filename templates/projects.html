@@ -18,6 +18,10 @@
     </div>
      <div class="well well-large">
         <ul>
+            {% if character.isAdmin %}
+            <br>
+            <a class="btn btn-small" href="/projects?projectKey=-1"><span class="icon-edit"></span>New Project</a>
+            {% endif %}
             {% for project in projects_list %}
             <li><h3 style="" id="{{project.projectName}}">{{project.projectName}} <span class="label label-info">Level:<span class="badge badge-important">{{project.level}} </span></span> <span class="label label-info">XP: <span class="badge badge-important">{{project.xp}}</span></span></h3>
                 <ul>
@@ -39,7 +43,9 @@
             </li>
             {% if character.isAdmin %}
             <br>
-            <a class="btn btn-small" href="/projects?projectKey={{project.key.integer_id()}}"><span class="icon-edit"></span></a>
+            <a class="btn btn-small" href="/projects?projectKey={{project.key.integer_id()}}"><span class="icon-edit"></span>Edit</a>
+            <br>
+            <a class="btn btn-small btn-danger" href="/projects?projectKey={{project.key.integer_id()}}&delete=true"><span class="icon-edit"></span>Delete</a>
             {% endif %}
             <hr>
             {% else %}

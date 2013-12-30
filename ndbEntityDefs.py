@@ -64,14 +64,8 @@ class Project(ndb.Model):
 
     @classmethod
     def GetProjects(cls):
-        qry = Project.query().order(cls.level)
-        allProjects = qry.fetch(100)
-        if not allProjects:
-            reader = csv.reader(open("projects.csv"), delimiter=',', quotechar='"')
-            products = list(map(cls.ParseProductRow, reader))
-            for product in products:
-                product.put()
-            allProjects = products
+        qry = Project.query().order(cls.level, cls.projectName)
+        allProjects = qry.fetch(10000)
         if not isinstance(allProjects, types.ListType):
             allProjects = [allProjects]
         return allProjects

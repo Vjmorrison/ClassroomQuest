@@ -39,7 +39,7 @@ class CharacterSheetHandler(BaseRequestHandler):
         user = users.get_current_user()
         character = Character.GetCharacterByUser(user)
 
-        allList = SubmittedProject.query(SubmittedProject.userID == user.user_id()).fetch(100)
+        allList = SubmittedProject.query(SubmittedProject.userID == user.user_id()).fetch(1000)
         completedList = [i for i in allList if i.accepted]
         waitingList = [i for i in allList if not i.accepted and not i.rejected]
 
@@ -52,7 +52,7 @@ class CharacterSheetHandler(BaseRequestHandler):
                     addProj = False
                     break
             if addProj:
-                if proj.level <= character.level or proj.level == 10:
+                if proj.level <= character.level or proj.level >= 5:
                     projectsToDo.append(proj)
 
         template_values = {

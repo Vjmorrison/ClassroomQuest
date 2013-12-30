@@ -10,11 +10,17 @@ from ndbEntityDefs import Character
 
 import jinja2
 import webapp2
+from ConfigParser import ConfigParser
 
 
 class BaseRequestHandler(webapp2.RequestHandler):
 
-    USERNAME_WHITELIST = ["vjmorrison@gmail.com"]
+    CONFIG_FILE = ConfigParser()
+    CONFIG_FILE.read("config.ini")
+
+    USERNAME_WHITELIST = str(CONFIG_FILE.get("Users", 'userWhitelist')).split(',')
+
+    ADMIN_WHITELIST = str(CONFIG_FILE.get("Users", 'adminWhitelist')).split(',')
 
     JINJA_ENVIRONMENT = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -70,7 +76,8 @@ class BaseRequestHandler(webapp2.RequestHandler):
         return True
 
     def IsUserInAdminWhitelist(self, user):
-        if "vjmorrison@gmail.com".upper() not in user.email().upper():
+        #print self.ADMIN_WHITELIST
+        if not any(username in user.email().upper() for username in [x.upper() for x in self.ADMIN_WHITELIST]):
                 return False
         return True
 

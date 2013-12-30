@@ -34,7 +34,11 @@
             <button id="addNewRequirement" class="btn btn-success btn-small" onclick="AddRequirement(); return false;"><span class="icon-plus-sign"></span> </button>
             <button id="removeRequirement" class="btn btn-danger btn-small" onclick="RemoveRequirement(); return false;"><span class="icon-minus-sign"></span></button>
             <input class="hide" name="save" type="checkbox" checked>
+            {% if project.key %}
             <input class="hide" type="hidden" name="projectKey" value="{{project.key.integer_id()}}">
+            {% else %}
+            <input class="hide" type="hidden" name="projectKey" value="-1">
+            {% endif %}
             <div>
                 <br>
                 <input type="submit" class="btn btn-warning btn-large" value="Save Changes">

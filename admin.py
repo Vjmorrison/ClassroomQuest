@@ -9,6 +9,7 @@ from google.appengine.ext import ndb
 
 import jinja2
 import webapp2
+import logging
 from baseRequestHandler import BaseRequestHandler
 from ndbEntityDefs import Character
 from ndbEntityDefs import SubmittedProject
@@ -29,14 +30,13 @@ class AdminHandler(BaseRequestHandler):
         PAGE_DESCRIPTION = 'Admin ' + users.get_current_user().nickname()
         user = users.get_current_user()
 
-        allSubmissions = SubmittedProject.query().fetch(100)
-        waitingList = [i for i in allSubmissions if not i.accepted and not i.rejected]
+        waitingList = SubmittedProject.query(SubmittedProject.accepted == None and SubmittedProject.rejected == None).fetch(1000)
 
-        allUsers = Character.query().fetch(100)
+        allUsers = Character.query().fetch(10000)
         submissionList = {}
-        print waitingList
-        print allUsers
-        print submissionList
+        #print waitingList
+        #print allUsers
+        #print submissionList
         for submission in waitingList:
             for thisUser in allUsers:
                 if thisUser.userID == submission.userID:
@@ -59,14 +59,14 @@ class AdminHandler(BaseRequestHandler):
         if self.IsUserInAdminWhitelist(user):
             subKey = int(self.request.get("submissionKey"))
             accepted = bool(self.request.get("Accept"))
-            subCharacter = Character.GetCharacterByID(self.request.get("userID"))
-            submittedProject = ''
-            for submission in SubmittedProject.query().fetch(100):
-                if submission.key.integer_id() == subKey:
-                    submittedProject = submission
-                    break
+            userID = str(self.request.get("userID"))
+            subCharacter = Character.GetCharacterByID(userID)
+            submittedProject = SubmittedProject.query(SubmittedProject.userID == subCharacter.userID and (SubmittedProject.accepted == None and SubmittedProject.rejected == None)).fetch(1)
+            #submittedProject = SubmittedProject.query(ndb.AND(SubmittedProject.userID == subCharacter.userID, ndb.AND(SubmittedProject.accepted == None , SubmittedProject.rejected == None))).fetch(1)
             if accepted:
-                if not submittedProject == '':
+                logging.info(submittedProject)
+                if not submittedProject is None and len(submittedProject) == 1:
+                    submittedProject = submittedProject[0]
                     submittedProject.accepted = True
                     submittedProject.rejected = False
                     submittedProject.ReviewedTime = datetime.datetime.now() - datetime.timedelta(hours=7)
@@ -78,11 +78,16 @@ class AdminHandler(BaseRequestHandler):
                         subCharacter.numProjects = 0
                     subCharacter.numProjects += 1
                     subCharacter.put()
+                else:
+                    logging.error("Could not find Submitted Project!")
             else:
-                if not submittedProject == '':
+                if not submittedProject is None and len(submittedProject) == 1:
+                    submittedProject = submittedProject[0]
                     submittedProject.accepted = False
                     submittedProject.rejected = True
                     submittedProject.ReviewedTime = datetime.datetime.now() - datetime.timedelta(hours=7)
                     submittedProject.put()
+                else:
+                    logging.error("Could not find Submitted Project!")
         else:
             self.handle_404(self.request, self.response, "")
