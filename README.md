@@ -3,6 +3,8 @@ ClassroomQuest
 
 A GAE (google app engine) project that gives classrooms the ability to have student driven experiences.  Students complete assignments, gain XP, and level up!
 
+View a live sample at [http://gamedevpanthers.appspot.com/](http://gamedevpanthers.appspot.com/)
+
 Tech Structure
 ---------
 * The app is written in Python using the Google App Engine as a platform.  
