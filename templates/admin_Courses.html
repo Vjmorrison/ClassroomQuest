@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+
+    <div class="hero-unit">
+        <h1>Characters</h1>
+    </div>
+    <div class="well well-large">
+        <h2>Existing</h2>
+        <div class="accordion" id="accordion1">
+            {% if allCourses %}
+            {% for course in allCourses %}
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                <a style="text-decoration: none" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#body_{{course.key.integer_id()}}">
+                    <h3 style="" id="{{course.key.integer_id()}}">
+                         <img width="75" src="{{course.iconURL}}">
+                        {{course.courseNumber}}: {{course.courseName}}
+                    </h3>
+                </a>
+                </div>
+                <div id="body_{{course.key.integer_id()}}" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <ul>
+                            <li><span class="label label-info">Description</span>
+                                <p>{{course.courseDescription}}</p>
+                            </li>
+                            <li><span class="label label-info">Syllabus</span>
+                                <p><a href="{{course.syllabusLink}}">{{course.syllabusLink}}</a></p>
+                            </li>
+                            <li><span class="label label-info">Max Project Level</span>
+                                <p>{{course.maxProjectLevel}}</p>
+                            </li>
+                            <li><span class="label label-info">Level Required for an A+</span>
+                                <p>{{course.levelReqForA}}</p>
+                            </li>
+                        </ul>
+                        <a class="btn btn-small btn-danger" href="/admin?page=courses&delete=true&courseid={{course.key.integer_id()}}"><span class="icon-remove"></span>Delete</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% else %}
+
+            {% endif %}
+            <hr>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                <a style="text-decoration: none" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#body_new">
+                    <h3 style="" id="new">
+                        Add New Course!
+                    </h3>
+                </a>
+                </div>
+                <div id="body_new" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <p>Enter an existing Course Number to update that course entry.</p>
+                        <form id="NewProjectInfo" action="/admin" method="post">
+                            <h3>Course Title: <input style="margin-bottom: 0px" class="input-large" name="name" type="text" placeholder="Level Design II"></h3>
+                            <h3>Course Number: <input style="margin-bottom: 0px" class="input-small" name="number" type="text" placeholder="CPSC-244"></h3>
+                            <h3>Syllabus Link: <input style="margin-bottom: 0px" class="input-xxlarge" name="link" type="text" placeholder="https://webfarm.chapman.edu/OnlineSyllabus/?page=&size=&coursename=CPSC-244"></h3>
+                            <h3>Description: <textarea style="margin-bottom: 0px" name="description" class="input-xxlarge" type="text" placeholder="An Awesome class about..."></textarea></h3>
+                            <h3>Max Project Level: <input style="margin-bottom: 0px" class="input-mini" name="maxLevel" type="number" placeholder="10"></h3>
+                            <h3>Level Required For A+: <input style="margin-bottom: 0px" class="input-mini" name="levelForA" type="number" placeholder="10"></h3>
+                            <h3>Course Icon: <input style="margin-bottom: 0px" class="input-xxlarge" name="iconURL" type="text" placeholder="http://i.imgur.com/62a8wtI.jpg"></h3>
+                            <input class="hide" type="hidden" name="page" value="courses">
+                            <input type="submit" class="btn btn-warning btn-large" value="Submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+        {% endautoescape %}

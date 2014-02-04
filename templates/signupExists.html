@@ -1,0 +1,28 @@
+!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+
+ <div class="container">
+    <div class="hero-unit">
+        <h1>{{character.username}} already exists</h1>
+        <p>There is already a character using the email address {{user.email()}}</p>
+        <p>If you feel that this is in error, please contact your instructor to correct this.</p>
+    </div>
+    <div class="well well-large">
+    {% if character.isUnderReview %}
+        <p>The character is currently under review, please feel free to use the <a href="/guest" class="btn btn-warning btn-large">guest</a> access to check out the site until it is accepted or rejected.</p>
+    {% else %}
+        <p>You already have been approved for the class and need not create a new account! <a href="/guest" class="btn btn-success btn-large">View Main Page</a></p>
+    {% endif %}
+    </div>
+</body>
+</html>
+        {% endautoescape %}

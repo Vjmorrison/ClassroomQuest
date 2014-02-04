@@ -25,7 +25,7 @@
                     {% if allSubmissions is defined %}
                         {% for submission, dict in allSubmissions.iteritems() %}
                         <tr id="{{submission}}">
-                            <td><a href="admin?ID={{dict[1].user.user_id()}}">{{dict[1].user.nickname()}}</a></td>
+                            <td><a href="admin?ID={{dict[1].user.user_id()}}">{{dict[1].fullName}}</a></td>
                             <td>{{dict[0].submissionTime.strftime("%A, %d. %B %Y %I:%M%p")}}</td>
                             <td>{{dict[0].projectName}}</td>
                             <td><button id="Accept{{submission}}" class="btn btn-success" type="button" onclick="OnAcceptProject({{submission}}, '{{dict[1].user.user_id()}}')">Accept</button><button id="Reject{{submission}}" class="btn btn-danger pull-right" type="button" onclick="OnRejectProject({{submission}}, '{{dict[1].user.user_id()}}')">Reject</button></td>

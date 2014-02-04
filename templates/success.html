@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+    <div class="hero-unit">
+        <h3>SUCCESS!</h3>
+        <a href="{{linkURL}}"><button class="btn btn-info">Back To {{linkText}}</button></a>
+    </div>
+</body>
+</html>
+        {% endautoescape %}

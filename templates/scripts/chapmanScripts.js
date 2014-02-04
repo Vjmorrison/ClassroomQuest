@@ -90,11 +90,14 @@ function OnRequestSuccess(response, status, jqXHR)
 
 function OnUnsavedChanges()
 {
-    var saveBTN = document.getElementById("saveChangesBTN");
-    saveBTN.disabled = false;
-    saveBTN.className = "btn btn-success";
-    saveBTN.innerHTML = "Save Changes";
     ToggleProjectVisible(GetSelectedProjectID());
+    var saveBTN = document.getElementById("saveChangesBTN");
+    if(saveBTN != null)
+    {
+        saveBTN.disabled = false;
+        saveBTN.className = "btn btn-success";
+        saveBTN.innerHTML = "Save Changes";
+    }
 }
 
 
@@ -194,15 +197,18 @@ function ToggleProjectVisible(projectKey)
 
         if(window.selectedKey != projectKey)
         {
-            var windowProjectInfo = document.getElementById("info_"+window.selectedKey);
-            if(!windowProjectInfo.classList.contains("hide"))
+            if(window.selectedKey != "None")
             {
-                windowProjectInfo.classList.add("hide");
-                var selectedVideoDiv = document.getElementById("video_" + window.selectedKey);
-                if(selectedVideoDiv != null)
+                var windowProjectInfo = document.getElementById("info_"+window.selectedKey);
+                if(!windowProjectInfo.classList.contains("hide"))
                 {
-                    var selectedVideoURL = document.getElementById("videoURL_" + window.selectedKey).textContent;
-                    selectedVideoDiv.innerHTML = "";
+                    windowProjectInfo.classList.add("hide");
+                    var selectedVideoDiv = document.getElementById("video_" + window.selectedKey);
+                    if(selectedVideoDiv != null)
+                    {
+                        var selectedVideoURL = document.getElementById("videoURL_" + window.selectedKey).textContent;
+                        selectedVideoDiv.innerHTML = "";
+                    }
                 }
             }
 
@@ -307,4 +313,58 @@ function RemoveAttachment()
     }
 
     window.attachmentsCount--;
+}
+
+function PreviewImage(url,imgID)
+{
+    var img = document.getElementById(imgID);
+    img.src = url;
+}
+
+function AcceptCharacter(userID)
+{
+    console.log(userID)
+    var AcceptBTN = document.getElementById("Accept"+userID);
+    var RejectBTN = document.getElementById("Reject"+userID);
+    AcceptBTN.disabled = true;
+    RejectBTN.parentNode.removeChild(RejectBTN);
+
+    $.ajax(
+        {
+            type:"POST",
+            data: "page=characters&Accept=True" + "&userID=" + userID,
+            cache: false,
+            url: "/admin",
+            success: function(response) {
+                OnCharacterSuccess(response, userID);
+            }
+        }
+    );
+}
+
+function RejectCharacter(userID)
+{
+    console.log(userID)
+    var AcceptBTN = document.getElementById("Accept"+userID);
+    var RejectBTN = document.getElementById("Reject"+userID);
+    AcceptBTN.disabled = true;
+    RejectBTN.parentNode.removeChild(RejectBTN);
+
+    $.ajax(
+        {
+            type:"POST",
+            data: "page=characters&Accept=False" + "&userID=" + userID,
+            cache: false,
+            url: "/admin",
+            success: function(response) {
+                OnCharacterSuccess(response, userID);
+            }
+        }
+    );
+}
+
+
+function OnCharacterSuccess(response, userID)
+{
+    console.log("Accepted!");
 }

@@ -9,14 +9,26 @@
 </head>
 <body>
  {% include 'templates/navbar.html' %}
+    {% if character.username == "GUEST" %}
+        {% set guestPrefix = '/guest/'%}
+    {% else %}
+        {% set guestPrefix = '/'%}
+    {% endif %}
     <div id="Submitted Block" class="container">
         <div class="hero-unit">
-            <h1>Welcome back: {{user.nickname()}}</h1>
+            <h1>Welcome back: {{character.username}}</h1>
         </div>
+        {% if character.username == "GUEST" %}
+        <div class="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ALERTS!</strong> Messages that are intended for the student are displayed here if urgent attention is needed.
+        </div>
+        {% endif %}
+
         {% if character.currentProjectKey == 0 %}
         <div class="alert">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Warning!</strong> You have no active project!  Please <a href="/charactersheet" class="label label-important">Select</a> one soon!
+            <strong>Warning!</strong> You have no active project!  Please <a href="{{guestPrefix}}charactersheet" class="label label-important">Select</a> one soon!
         </div>
         {% endif %}
         {% if waitingSubmission %}
@@ -53,7 +65,7 @@
                     <ul>
                         <li><a href="https://docs.google.com/file/d/0B_emGO_CgNZHcTdtU1dzRWdMbnM/edit?usp=docslist_api">Pong Default Code UnityPackage</a> </li>
                         <li><a href="https://docs.google.com/file/d/0B_emGO_CgNZHQlh5TmpZRDdqNEU/edit?usp=sharing">Top Down Shooter Game UnityPackage</a> </li>
-                        <li><a href="https://github.com/Vjmorrison/Unity-Procedural">Beginnings of a Unity Voxel Base, Procedural Game</a></li>
+                        <li><a href="https://github.com/Vjmorrison/Unity-Procedural/tree/1.0.0_Release">Beginnings of a Unity Voxel Base, Procedural Game</a></li>
                     </ul>
                 </div>
             </div>
