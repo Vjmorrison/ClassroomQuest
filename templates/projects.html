@@ -15,37 +15,65 @@
         <h1>All Available Projects</h1>
         <p>Here are all of the projects that you can do over the course of the class.  As they are completed and accepted by the instructor, their experience points will be added to your character sheet and level recalculated.</p>
         <p>You can only work on projects that are of your current level.  Please visit the <a href="/charactersheet" class="label label-info">Character Sheet</a> page to review which projects you can work on next.</p>
+        {% if character.isAdmin %}
+        <br>
+        <a class="btn btn-small" href="/projects?projectKey=-1"><span class="icon-edit"></span>New Project</a>
+        {% endif %}
     </div>
      <div class="well well-large">
-        <ul>
+         <div class="accordion" id="accordion1">
+            {% if projects_list %}
             {% for project in projects_list %}
-            <li><h3 style="" id="{{project.projectName}}">{{project.projectName}} <span class="label label-info">Level:<span class="badge badge-important">{{project.level}} </span></span> <span class="label label-info">XP: <span class="badge badge-important">{{project.xp}}</span></span></h3>
-                <ul>
-                    <li><span class="label label-info">Description</span>
-                        <p>{{project.description}}</p>
-                    </li>
-                    <li><span class="label label-important">Requirements</span>
-                        <ol>
-                            {% for requirement in project.requirements %}
-                            <li>{{requirement}}</li>
-                            {% endfor %}
-                        </ol>
-                    </li>
-                    {% if project.videoURL %}
-                    <li><a class="btn btn-info btn-mini" href="http://www.youtube.com/watch?v={{project.videoURL}}">Video Link</a>
-                    {% endif %}
-                    </li>
-                </ul>
-            </li>
-            {% if character.isAdmin %}
-            <br>
-            <a class="btn btn-small" href="/projects?projectKey={{project.key.integer_id()}}"><span class="icon-edit"></span></a>
-            {% endif %}
-            <hr>
-            {% else %}
-            <li>no products found</li>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <h3 id="{{project.key.integer_id()}}">
+                        <a style="text-decoration: none" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#body_{{project.key.integer_id()}}">
+                        <b class="caret"></b>
+                        {{project.projectName}} <span class="label label-info">Level:<span class="badge badge-important">{{project.level}} </span></span> <span class="label label-info">XP: <span class="badge badge-important">{{project.xp}}</span></span>
+                        </a>
+                    </h3>
+                </div>
+                <div id="body_{{project.key.integer_id()}}" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <ul>
+                            <li><span class="label label-info">Description</span>
+                                <p>{{project.description}}</p>
+                            </li>
+                            <li><span class="label label-important">Requirements</span>
+                                <ol>
+                                    {% for requirement in project.requirements %}
+                                    <li>{{requirement}}</li>
+                                    {% endfor %}
+                                </ol>
+                            </li>
+                            {% if project.videoURL %}
+                            <li><a class="btn btn-info btn-mini" href="http://www.youtube.com/watch?v={{project.videoURL}}">Video Link</a></li>
+                            {% endif %}
+                            {% if project.attachments|length > 0 %}
+                            <li><span class="label label-success">Attachments</span>
+                                <ol>
+                                    {% for attachment in project.attachments %}
+                                    <li><a href="{{attachment}}">{{attachment}}</a></li>
+                                    {% endfor %}
+                                </ol>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        {% if character.isAdmin %}
+                        <br>
+                        <a class="btn btn-small" href="/projects?projectKey={{project.key.integer_id()}}"><span class="icon-edit"></span>Edit</a>
+                        <br>
+                        <a class="btn btn-small btn-danger" href="/projects?projectKey={{project.key.integer_id()}}&delete=true"><span class="icon-edit"></span>Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
             {% endfor %}
-        </ul>
+
+            {% else %}
+            <li>no projects found</li>
+            {% endif %}
+        </div>
     </div>
  </div>
 </body>

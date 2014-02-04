@@ -31,20 +31,11 @@ from contact import ContactHandler
 from admin import AdminHandler
 from ndbEntityDefs import Character
 from ndbEntityDefs import SubmittedProject
+from GuestHandlers import GuestHandler
+from signup import SignupHandler
 
 
 class MainHandler(BaseRequestHandler):
-
-    def RenderSuccess(self):
-        url = users.create_logout_url(self.request.uri)
-        url_linktext = 'Logout'
-        PAGE_DESCRIPTION = 'Welcome Back ' + users.get_current_user().nickname()
-        template_values = {
-            'titleDesc': PAGE_DESCRIPTION,
-            'url': url,
-            'url_linktext': url_linktext,
-        }
-        self.RenderTemplate("index", template_values)
 
     def RenderSuccess(self):
         url = users.create_logout_url(self.request.uri)
@@ -76,10 +67,13 @@ class MainHandler(BaseRequestHandler):
 
 app = webapp2.WSGIApplication(debug=True)
 app.router.add(('/', MainHandler))
+app.router.add(('/guest', GuestHandler))
+app.router.add(('/guest/.*', GuestHandler))
 app.router.add(('/charactersheet', CharacterSheetHandler))
 app.router.add(('/contact', ContactHandler))
 app.router.add(('/projects', ProjectsHandler))
 app.router.add(('/admin', AdminHandler))
+app.router.add(('/signup', SignupHandler))
 
 
 app.error_handlers[404] = BaseRequestHandler.handle_404

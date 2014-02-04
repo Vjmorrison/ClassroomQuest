@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+
+    <div class="hero-unit">
+        <h1>Characters</h1>
+    </div>
+    <div class="well well-large">
+        <h2>Waiting</h2>
+        <div class="accordion" id="accordionWaiting">
+            {% if waitingCharacters %}
+            {% for character in waitingCharacters %}
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <h3 style="" id="waiting_{{character.userID}}">
+                        <a style="text-decoration: none" class="accordion-toggle" data-toggle="collapse" data-parent="#accordionWaiting" href="#waitingBody_{{character.userID}}">
+                            <img width="50" src="{{character.avatar}}">
+                            {{character.fullName}}
+                        </a>
+                        <button id="Accept{{character.userID}}" class="btn btn-success" onclick="AcceptCharacter('{{character.userID}}')">Accept</button>
+                        <button id="Reject{{character.userID}}" class="btn btn-danger" onclick="RejectCharacter('{{character.userID}}')">Reject</button>
+                    </h3>
+                </div>
+                <div id="waitingBody_{{character.userID}}" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <ul>
+                            <li><span class="label label-info">Username</span>
+                                <p>{{character.username}}</p>
+                            </li>
+                            <li><span class="label label-info">Email</span>
+                                {% if character.user %}
+                                <p><a href="mailto:{{character.user.email()}}">{{character.user.email()}}</a></p>
+                                {% else %}
+                                <p>N/A</p>
+                                {% endif %}
+                            </li>
+                            <li><span class="label label-info">Course</span>
+                                {% if character.courseID %}
+                                <p>{{allCourseNames[character.courseID]}}</p>
+                                {% else %}
+                                <p>N/A</p>
+                                {% endif %}
+                            </li>
+                            <li><span class="label label-important">Avatar</span>
+                                <p>{{character.avatar}}</p>
+                                <div class="row">
+                                    <div class="span3">
+                                        <div class="thumbnail">
+                                            <img id="preview" src="{{character.avatar}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% else %}
+            <li>N/A</li>
+            {% endif %}
+        </div>
+    </div>
+    <div class="well well-large">
+        <h2>Existing</h2>
+        <div class="accordion" id="accordion1">
+            {% if allCharacters %}
+            {% for character in allCharacters %}
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                <a style="text-decoration: none" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#body_{{character.userID}}">
+                    <h3 style="" id="{{character.userID}}">
+                        <img width="40" src="{{character.avatar}}">
+                        {{character.fullName}}
+                        {% if character.isAdmin %}
+                        <span class="label label-important">Admin</span>
+                        {% endif %}
+                    </h3>
+                </a>
+                </div>
+                <div id="body_{{character.userID}}" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <ul>
+                            <li><span class="label label-info">Username</span>
+                                <p>{{character.username}}</p>
+                            </li>
+                            <li><span class="label label-info">Email</span>
+                                {% if character.user %}
+                                <p><a href="mailto:{{character.user.email()}}">{{character.user.email()}}</a></p>
+                                {% else %}
+                                <p>N/A</p>
+                                {% endif %}
+                            </li>
+                            <li><span class="label label-info">Course</span>
+                                {% if character.courseID %}
+                                <p>{{allCourseNames[character.courseID]}}</p>
+                                {% else %}
+                                <p>N/A</p>
+                                {% endif %}
+                            </li>
+                            <li><span class="label label-info">XP</span>
+                                <p>{{character.xp}}</p>
+                            </li>
+                            <li><span class="label label-info">Level</span>
+                                <p>{{character.level}}</p>
+                            </li>
+                            <li><span class="label label-info">Projects Completed</span>
+                                <p>{{character.numProjects}}</p>
+                            </li>
+                            <li><span class="label label-info">Avatar</span>
+                                <p>{{character.avatar}}</p>
+                                <div class="row">
+                                    <div class="span3">
+                                        <div class="thumbnail">
+                                            <img id="preview" src="{{character.avatar}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% else %}
+            <li>N/A</li>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+        {% endautoescape %}

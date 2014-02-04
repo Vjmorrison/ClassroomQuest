@@ -9,6 +9,11 @@
 </head>
 <body onload="InitSelectedProject('{{character.currentProjectKey}}')">
 {% include 'templates/navbar.html' %}
+    {% if character.username == "GUEST" %}
+        {% set guestPrefix = '/guest/'%}
+    {% else %}
+        {% set guestPrefix = '/'%}
+    {% endif %}
 <div class="container">
     <div class="hero-unit">
         <div class="row">
@@ -17,13 +22,62 @@
                     <img src="{{character.avatar}}">
                 </div>
             </div>
-            <div class="span2">
-                <h1 style="margin-top: 0">{{character.user.nickname()}}</h1>
+            <div class="span4">
+                <h1 style="margin-top: 0">{{character.username}}</h1>
                 <br/>
                 <p class="text-left" style="margin: 0"><span class="label label-info">Level: <span class="badge badge-inverse">{{character.level}}</span> </span></p>
                 <p class="text-left" style="margin: 0"><span class="label label-info">XP: <span class="badge badge-inverse">{{character.xp}}</span> </span></p>
                 <p class="text-left" style="margin: 0"><span class="label label-info">XP to Next Level: <span class="badge badge-inverse">{{character.XpToNextLevel()}}</span> </span></p>
                 <p class="text-left" style="margin: 0"><span class="label label-info">Completed Projects: <span class="badge badge-inverse">{{character.numProjects}}</span> </span></p>
+                <p><a href="#levelGuideModal" role="button" class="btn btn-info" data-toggle="modal">View Level Chart</a></p>
+            </div>
+            <div class="span 2">
+                <div>
+                    <img src="{{levelIconURL}}">
+                </div>
+            </div>
+            <br>
+            <!-- Modal -->
+            <div id="levelGuideModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="levelGuideModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="levelGuideModalLabel">Level Guide</h3>
+              </div>
+              <div class="modal-body">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center">Level</th>
+                            <th style="text-align: center">XP</th>
+                            <th style="text-align: center">Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for level in range(levelReqForA-1, -1, -1) %}
+                        <tr id="level{{level}}">
+                            <td style="text-align: center">{{level+1}}</td>
+                            <td style="text-align: center">{{500 * level * (level + 1)}}</td>
+                            <td style="text-align: center">
+                                {% if level >= levelReqForA - 1 %}
+                                A
+                                {% elif level == levelReqForA - 2 %}
+                                B
+                                {% elif level == levelReqForA - 3 %}
+                                C
+                                {% elif level == levelReqForA - 4 %}
+                                D
+                                {% else %}
+                                F
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+              </div>
             </div>
         </div>
 
@@ -34,7 +88,7 @@
         {% if projects_list.__len__() == 0 %}
             <p class="label label-success">There are no projects to select!  You have done the impossible and completed ALL the available projects!</p>
         {% else %}
-            {% if submitted is defined %}
+            {% if submitted %}
             <select id="selectedProject" onchange="OnUnsavedChanges()" style="margin-bottom: 0px" class="input-xxlarge" disabled>
                 {% for project in projects_list %}
                     {% if project.key.integer_id() == character.currentProjectKey %}
@@ -57,10 +111,14 @@
                 {% endfor %}
             </select>
             {% endif %}
-            {% if character.currentProjectKey != 0 %}
-            <button id="saveChangesBTN" class="btn btn-inverse" type="button" onclick="OnSaveChanges()" disabled>Saved</button>
+            {% if character.username == "GUEST" %}
+                <button id="none" class="btn btn-inverse" type="button" onclick="OnSaveChanges()" disabled>Saved</button>
             {% else %}
-            <button id="saveChangesBTN" class="btn btn-success" type="button" onclick="OnSaveChanges()">Select a New Project</button>
+                {% if character.currentProjectKey != 0%}
+                <button id="saveChangesBTN" class="btn btn-inverse" type="button" onclick="OnSaveChanges()" disabled>Saved</button>
+                {% else %}
+                <button id="saveChangesBTN" class="btn btn-success" type="button" onclick="OnSaveChanges()">Select a New Project</button>
+                {% endif %}
             {% endif %}
         {% endif %}
         <br>
@@ -98,13 +156,13 @@
 
         <h4>Submit Project</h4>
         <div id="submitContainer">
-            {% if submitted is defined %}
+            {% if submitted is defined or character.username == "GUEST" %}
             <p><span class="badge badge-important">!</span>You have already submitted a project!  Please wait for the instructor to review the project. please be prepared to have your project available to show at the next possible class.</p>
             <p>Feel free to work on additional projects before then.</p>
             {% else %}
             <p>Once you are ready to submit your current in-progress project, click the SUBMIT button.  This will notify the instructor that you are ready to have your project reviewed.</p>
             <p>Once Submitted, please be prepared to have your project available to show at the next possible class.</p>
-            {% if character.currentProjectKey != 0 %}
+                {% if character.currentProjectKey != 0%}
                 <button id="submitBTN" class="btn btn-danger" type="button" onclick="OnSubmitProject()" >Submit Project</button>
                 {% else %}
                 <button id="submitBTN" class="btn btn-danger" type="button" onclick="OnSubmitProject()" disabled>Select a Project First</button>

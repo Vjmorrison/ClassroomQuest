@@ -1,0 +1,49 @@
+!DOCTYPE html>
+        {% autoescape true %}
+<html>
+<head>
+    <title>Chapman University Game Development | {{ titleDesc }}</title>
+    <meta property="og:image" content="images/favicon.png" />
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css"  media="screen"/>
+</head>
+<body>
+ {% include 'templates/navbar.html' %}
+
+ <div class="container">
+    <div class="hero-unit">
+        <h1>New User Signup</h1>
+        <p>Please enter in all the required fields!</p>
+        <p>Once complete, the submitted application will be reviewed by the instructor. If approved, you will automatically be given access to the class.</p>
+    </div>
+    <div class="well well-large">
+        <form id="characterInfo" action="/signup" method="post">
+            <h3>Student Name: <input style="margin-bottom: 0px" class="input-large" name="fullName" type="text" placeholder="Samus Aran"></h3>
+            <h3>Nickname: <input style="margin-bottom: 0px" class="input-large" name="nickname" type="text" placeholder="MetroidKiller227"></h3>
+            <h3>Student Image URL: <input style="margin-bottom: 0px" class="input-xlarge" id="imgURL" name="imageURL" type="text" placeholder="http://i.imgur.com/gOhQSGd.jpg"><button class="btn btn-info btn-mini" onclick="PreviewImage(document.getElementById('imgURL').value, 'preview');" type=button>Preview</button> </h3>
+            <div class="row">
+                <div class="span3">
+                    <div class="thumbnail">
+                        <img id="preview" src="/images/missing.png">
+                    </div>
+                </div>
+            </div>
+            <h3>Enrolled Course:
+                <select id="selectedCourse" name="selectedCourse" style="margin-bottom: 0px" class="input-xxlarge" form="characterInfo">
+                    {% if allCourses %}
+                    {% for course in allCourses %}
+                        <option value="{{course.key.integer_id()}}">{{course.courseNumber}}-{{course.courseName}}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+            </h3>
+            <div>
+                <br>
+                <input type="submit" class="btn btn-warning btn-large" value="Submit!">
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>
+        {% endautoescape %}

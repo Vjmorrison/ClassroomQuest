@@ -90,11 +90,14 @@ function OnRequestSuccess(response, status, jqXHR)
 
 function OnUnsavedChanges()
 {
-    var saveBTN = document.getElementById("saveChangesBTN");
-    saveBTN.disabled = false;
-    saveBTN.className = "btn btn-success";
-    saveBTN.innerHTML = "Save Changes";
     ToggleProjectVisible(GetSelectedProjectID());
+    var saveBTN = document.getElementById("saveChangesBTN");
+    if(saveBTN != null)
+    {
+        saveBTN.disabled = false;
+        saveBTN.className = "btn btn-success";
+        saveBTN.innerHTML = "Save Changes";
+    }
 }
 
 
@@ -123,6 +126,7 @@ function OnAcceptSuccess(response, submissionID)
 {
     var row = document.getElementById(submissionID)
     row.disabled = true;
+    console.log("Accepted!");
 }
 
 function OnRejectProject(SubKey, userID)
@@ -166,6 +170,11 @@ function InitRequirements()
     window.requirementsCount = $("#requirementsList li").size() - 1
 }
 
+function InitAttachments()
+{
+    window.attachmentsCount = $("#attachmentsList li").size() - 1
+}
+
 function ToggleProjectVisible(projectKey)
 {
     var selectedProjectInfo = document.getElementById("info_" + projectKey);
@@ -188,15 +197,18 @@ function ToggleProjectVisible(projectKey)
 
         if(window.selectedKey != projectKey)
         {
-            var windowProjectInfo = document.getElementById("info_"+window.selectedKey);
-            if(!windowProjectInfo.classList.contains("hide"))
+            if(window.selectedKey != "None")
             {
-                windowProjectInfo.classList.add("hide");
-                var selectedVideoDiv = document.getElementById("video_" + window.selectedKey);
-                if(selectedVideoDiv != null)
+                var windowProjectInfo = document.getElementById("info_"+window.selectedKey);
+                if(!windowProjectInfo.classList.contains("hide"))
                 {
-                    var selectedVideoURL = document.getElementById("videoURL_" + window.selectedKey).textContent;
-                    selectedVideoDiv.innerHTML = "";
+                    windowProjectInfo.classList.add("hide");
+                    var selectedVideoDiv = document.getElementById("video_" + window.selectedKey);
+                    if(selectedVideoDiv != null)
+                    {
+                        var selectedVideoURL = document.getElementById("videoURL_" + window.selectedKey).textContent;
+                        selectedVideoDiv.innerHTML = "";
+                    }
                 }
             }
 
@@ -261,4 +273,98 @@ function RemoveRequirement()
         list.removeChild(newInput.parentNode)
     }
     window.requirementsCount--;
+}
+
+function AddAttachment()
+{
+    if(window.attachmentsCount == null)
+    {
+        InitAttachments();
+    }
+
+    window.attachmentsCount++;
+    var list = document.getElementById("attachmentsList");
+
+    var newReq = document.createElement("li");
+    var newInput = document.createElement("input");
+
+    newInput.id = "attachment_" + window.attachmentsCount;
+    newInput.name = "attachment_" + window.attachmentsCount;
+    newInput.type = "text";
+    newInput.className = "input-xxlarge";
+
+    newReq.appendChild(newInput);
+    list.appendChild(newReq);
+}
+
+function RemoveAttachment()
+{
+    if(window.requirementsCount == null)
+    {
+        InitAttachments();
+    }
+
+    var list = document.getElementById("attachmentsList");
+    var newInput = document.getElementById("attachment_" + window.attachmentsCount);
+
+    if(newInput != null)
+    {
+        list.removeChild(newInput.parentNode)
+    }
+
+    window.attachmentsCount--;
+}
+
+function PreviewImage(url,imgID)
+{
+    var img = document.getElementById(imgID);
+    img.src = url;
+}
+
+function AcceptCharacter(userID)
+{
+    console.log(userID)
+    var AcceptBTN = document.getElementById("Accept"+userID);
+    var RejectBTN = document.getElementById("Reject"+userID);
+    AcceptBTN.disabled = true;
+    RejectBTN.parentNode.removeChild(RejectBTN);
+
+    $.ajax(
+        {
+            type:"POST",
+            data: "page=characters&Accept=True" + "&userID=" + userID,
+            cache: false,
+            url: "/admin",
+            success: function(response) {
+                OnCharacterSuccess(response, userID);
+            }
+        }
+    );
+}
+
+function RejectCharacter(userID)
+{
+    console.log(userID)
+    var AcceptBTN = document.getElementById("Accept"+userID);
+    var RejectBTN = document.getElementById("Reject"+userID);
+    AcceptBTN.disabled = true;
+    RejectBTN.parentNode.removeChild(RejectBTN);
+
+    $.ajax(
+        {
+            type:"POST",
+            data: "page=characters&Accept=False" + "&userID=" + userID,
+            cache: false,
+            url: "/admin",
+            success: function(response) {
+                OnCharacterSuccess(response, userID);
+            }
+        }
+    );
+}
+
+
+function OnCharacterSuccess(response, userID)
+{
+    console.log("Accepted!");
 }

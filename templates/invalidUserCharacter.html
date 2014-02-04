@@ -10,16 +10,25 @@
 <body>
     <div class="container">
         <div class="hero-unit">
-            <h1>Invalid User</h1>
-            <p class="lead">The supplied user was not a valid chapman student or admin.</p>
+            <h1>No Character Found</h1>
+            <p class="lead">You have not yet registered a character for this system.</p>
             <p>This web portal is only for students enrolled in the following classes:</p>
                 <ul >
-                    <li class="text-info">Level Design 1: CPSC 244</li>
-                    <li class="text-info">Level Design 2: CPSC 344</li>
+                    <li class="text-info"><a href="https://webfarm.chapman.edu/OnlineSyllabus/?page=&size=&coursename=CPSC-244">Level Design 1: CPSC 244</a></li>
+                    <li class="text-info"><a href="https://webfarm.chapman.edu/OnlineSyllabus/?page=&size=&coursename=CPSC-344">Level Design 2: CPSC 344</a></li>
                 </ul>
-            </br>
-            <p>Please login to view the class content</p>
-            <a href="{{ url|safe }}" class="btn btn-primary btn-large">{{ url_linktext }}</a>
+            <div class="well">
+                <p>If you are a student in one of those above classes (or soon will be) please click the button below to register and the instructor will let you know as soon as it is ready to use!</p>
+                <a href="/signup" class="btn btn-success btn-large">Register</a>
+            </div>
+            <div class="well">
+                <p>If you would like to visit the website to look around, you can do so with Guest access.  You will be able to see some sample pages and information about the website and instructional methods, but will unable to submit or track any information.</p>
+                <a href="/guest" class="btn btn-warning btn-large">View As Guest</a>
+            </div>
+            <div class="well">
+                <p>OR Logout and Log in with an appropriate <span class="label label-inverse">@MAIL.CHAPMAN.EDU</span> email address to view the class content</p>
+                <a href="{{ url|safe }}" class="btn btn-primary btn-large">{{ url_linktext }}</a>
+            </div>
         </div>
     </div>
 

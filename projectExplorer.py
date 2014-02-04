@@ -18,9 +18,6 @@ from ndbEntityDefs import Character
 class ProjectsHandler(BaseRequestHandler):
 
     def RenderSuccess(self):
-        url = users.create_logout_url(self.request.uri)
-        url_linktext = 'Logout'
-        PAGE_DESCRIPTION = 'Admin ' + users.get_current_user().nickname()
         user = users.get_current_user()
 
         projectKey = self.request.get("projectKey")
@@ -29,16 +26,24 @@ class ProjectsHandler(BaseRequestHandler):
         if self.IsUserInAdminWhitelist(user) and not projectKey == "":
             self.ProcessPostMessage()
         else:
-            projects = Project.GetProjects()
-            template_values = {
-                'titleDesc': PAGE_DESCRIPTION,
-                'url': url,
-                'url_linktext': url_linktext,
-                'user': user,
-                'projects_list': projects,
-                'character': Character.GetCharacterByUser(user)
-            }
-            self.RenderTemplate("projects", template_values)
+            self.RenderProjectList()
+
+    def RenderProjectList(self):
+        url = users.create_logout_url(self.request.uri)
+        url_linktext = 'Logout'
+        PAGE_DESCRIPTION = 'Admin ' + users.get_current_user().nickname()
+        user = users.get_current_user()
+
+        projects = Project.GetProjects()
+        template_values = {
+            'titleDesc': PAGE_DESCRIPTION,
+            'url': url,
+            'url_linktext': url_linktext,
+            'user': user,
+            'projects_list': projects,
+            'character': Character.GetCharacterByUser(user)
+        }
+        self.RenderTemplate("projects", template_values)
 
     def ProcessPostMessage(self):
         url = users.create_logout_url(self.request.uri)
@@ -46,12 +51,27 @@ class ProjectsHandler(BaseRequestHandler):
         PAGE_DESCRIPTION = 'Admin ' + users.get_current_user().nickname()
         user = users.get_current_user()
         if self.IsUserInAdminWhitelist(user):
-            projectKey = int(self.request.get("projectKey"))
+            stringKey = self.request.get("projectKey")
+            if not stringKey == '':
+                projectKey = int(stringKey)
+            else:
+                projectKey = -1
 
-            project = Project.GetProject(projectKey)
+            project = Project()
 
-            submission = bool(self.request.get("save"))
-            if submission:
+            if not projectKey == -1:
+                project = Project.GetProject(projectKey)
+                if project is None:
+                    self.RenderProjectList()
+                    return
+                if bool(self.request.get("delete")):
+                    project.key.delete()
+                    self.RenderProjectList()
+                    return
+
+            isSubmission = bool(self.request.get("save"))
+
+            if isSubmission:
                 newName = self.request.get("projectName")
                 newDesc = self.request.get("description")
                 newLevel = int(self.request.get("level"))
@@ -65,26 +85,26 @@ class ProjectsHandler(BaseRequestHandler):
                         break
                     newRequirements.append(requirementValue)
 
+                newAttachments = []
+
+                for j in range(100):
+                    attachmentValue = self.request.get("attachment_" + str(j))
+                    if attachmentValue == "":
+                        break
+                    newAttachments.append(attachmentValue)
+
                 project.projectName = newName
                 project.xp = newXP
                 project.level = newLevel
                 project.description = newDesc
                 project.requirements = newRequirements
-                if not newVideoURL == 'None':
+                project.attachments = newAttachments
+                if not newVideoURL == 'None' or newVideoURL == "":
                     project.videoURL = newVideoURL
 
                 project.put()
 
-                projects = Project.GetProjects()
-                template_values = {
-                    'titleDesc': PAGE_DESCRIPTION,
-                    'url': url,
-                    'url_linktext': url_linktext,
-                    'user': user,
-                    'projects_list': projects,
-                    'character': Character.GetCharacterByUser(user)
-                }
-                self.RenderTemplate("projects", template_values)
+                self.RenderProjectList()
 
             else:
                 template_values = {

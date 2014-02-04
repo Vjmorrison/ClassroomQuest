@@ -24,23 +24,35 @@
                 </button>
             </div>
             <a class="brand" href="/">Chapman Game Dev</a>
+            {% if character %}
             <div class="nav-collapse collapse">
                 <ul class="nav">
+                   {% if character.username == "GUEST" %}
+                    {% set guestPrefix = '/guest/'%}
+                   {% else %}
+                    {% set guestPrefix = '/'%}
+                   {% endif %}
                     <li class="active">
-                        <a href="/">Home</a>
+                        <a href="{{guestPrefix}}">Home</a>
                     </li>
                     <li>
-                        <a href="/charactersheet">Character Sheet</a>
+                        <a href="{{guestPrefix}}charactersheet">Character Sheet</a>
                     </li>
                     <li>
-                        <a href="/projects">Projects</a>
+                        <a href="{{guestPrefix}}projects">Projects</a>
                     </li>
                     <li>
-                        <a href="/contact">Contact</a>
+                        <a href="{{guestPrefix}}contact">Contact</a>
                     </li>
-                    {% if character.isAdmin %}
-                    <li>
-                        <a href="/admin">Admin</a>
+                    {% if character.isAdmin  or  character.username == "GUEST" %}
+                    <li class="dropdown">
+                        <a href="{{guestPrefix}}admin" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b>Admin</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{guestPrefix}}admin">Project Submissions</a></li>
+                            <li><a href="admin?page=characters">Characters</a></li>
+                            <li><a href="admin?page=courses">Courses</a></li>
+                            <li><a href="admin?page=admins">Admins</a></li>
+                        </ul>
                     </li>
                     {% endif %}
                     <li class="logout">
@@ -48,6 +60,7 @@
                     </li>
                 </ul>
             </div>
+            {% endif %}
         </div>
     </div>
 <!--END HEADER-->

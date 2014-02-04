@@ -28,6 +28,7 @@ from baseRequestHandler import BaseRequestHandler
 from ndbEntityDefs import Character
 from ndbEntityDefs import Project
 from ndbEntityDefs import SubmittedProject
+from ndbEntityDefs import Course
 
 
 class CharacterSheetHandler(BaseRequestHandler):
@@ -39,9 +40,12 @@ class CharacterSheetHandler(BaseRequestHandler):
         user = users.get_current_user()
         character = Character.GetCharacterByUser(user)
 
-        allList = SubmittedProject.query(SubmittedProject.userID == user.user_id()).fetch(100)
+        allList = SubmittedProject.query(SubmittedProject.userID == user.user_id()).fetch(1000)
         completedList = [i for i in allList if i.accepted]
-        waitingList = [i for i in allList if not i.accepted and not i.rejected]
+
+        course = Course.GetCourse(character.courseID)
+        if course is None:
+            course = Course.GetCourseByNumber("GUEST")
 
         allProjects = Project.GetProjects()
         projectsToDo = []
@@ -52,7 +56,7 @@ class CharacterSheetHandler(BaseRequestHandler):
                     addProj = False
                     break
             if addProj:
-                if proj.level <= character.level or proj.level == 10:
+                if proj.level <= character.level or proj.level == course.maxProjectLevel:
                     projectsToDo.append(proj)
 
         template_values = {
@@ -61,13 +65,15 @@ class CharacterSheetHandler(BaseRequestHandler):
             'url_linktext': url_linktext,
             'user': user,
             'character': character,
-            'projects_list': projectsToDo
+            'projects_list': projectsToDo,
+            'levelReqForA': course.levelReqForA,
+            'levelIconURL': character.GetLevelIconURL(),
         }
 
         allList = SubmittedProject.query(SubmittedProject.userID == user.user_id()).fetch(100)
         completedList = [i for i in allList if i.accepted]
         waitingList = [i for i in allList if not i.accepted and not i.rejected]
-        if waitingList:
+        if len(waitingList) > 0:
             template_values["submitted"] = True
         if completedList:
             template_values["completed_projects_list"] = completedList
